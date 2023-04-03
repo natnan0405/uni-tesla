@@ -8,13 +8,31 @@ const _easycom_uni_swiper_dot = () => "../../uni_modules/uni-swiper-dot/componen
 if (!Math) {
   _easycom_uni_swiper_dot();
 }
-const _sfc_main = {
+const __default__ = {
+  data() {
+    return {
+      share: {
+        title: "有事找超人",
+        path: "/pages/index/index",
+        // 全局分享的路径，比如 首页
+        imageUrl: "",
+        // 全局分享的图片(可本地可网络)
+        desc: "代码是写给人看的1212",
+        content: ""
+      }
+    };
+  }
+};
+const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
   __name: "index",
   setup(__props) {
+    const wxInfo = common_vendor.ref(common_vendor.wx$1.getSystemInfoSync());
     common_vendor.onMounted(() => {
       setTimeout(() => {
         setSwiperHeight();
+        setSwiperMagHeight();
       }, 100);
+      console.log(wxInfo.value);
     });
     const _DATA = common_vendor.reactive({
       windowHeight: common_vendor.index.getWindowInfo().windowHeight,
@@ -41,7 +59,7 @@ const _sfc_main = {
           h1: "Model Y",
           p: "高性能全智能SUV",
           a: "了解更多",
-          href: "",
+          href: "/pages/car/index?tab=1",
           info: [{ text: "2,100 +", p: "升储物空间" }, { text: "600公里", p: "续航里程", p2: "CLTC 综合工况" }, { text: "全驱轮动", p: "双电机" }]
         },
         {
@@ -49,7 +67,7 @@ const _sfc_main = {
           h1: "Model 3",
           p: "高性能全智能轿车",
           a: "了解更多",
-          href: "",
+          href: "/pages/car/index?tab=2",
           info: [{ text: "3.3 秒", p: "百公里加速*" }, { text: "675公里", p: "续航里程", p2: "CLTC 综合工况" }, { text: "全驱轮动", p: "双电机" }]
         },
         {
@@ -57,11 +75,17 @@ const _sfc_main = {
           h1: "Model S",
           p: "豪华旗舰轿跑",
           a: "了解更多",
-          href: "",
+          href: "/pages/car/index?tab=2",
           info: [{ text: "672公里", p: "续航里程(CLTC)" }, { text: "2.1 秒", p: "百公里加速*" }, { text: "322公里/时", p: "最高车速+" }]
         }
       ]
     });
+    const navigateTo = (href) => {
+      console.log(href);
+      common_vendor.index.navigateTo({
+        url: href
+      });
+    };
     const changeSwiper = (e) => {
       swiper.current = e.detail.current;
       common_vendor.nextTick$1(() => {
@@ -97,6 +121,39 @@ const _sfc_main = {
         }
       });
     };
+    const magazine = common_vendor.reactive({
+      indicatorDots: true,
+      autoplay: false,
+      duration: 500,
+      swiperHeight: "",
+      Height: "",
+      info: [
+        {
+          url: "/static/images/magazine1.jpg",
+          time: "2023年4月"
+        },
+        {
+          url: "/static/images/magazine2.jpg",
+          time: "2023年3月"
+        },
+        {
+          url: "/static/images/magazine3.jpg",
+          time: "2023年2月"
+        },
+        {
+          url: "/static/images/magazine4.jpg",
+          time: "2023年1月"
+        }
+      ]
+    });
+    const setSwiperMagHeight = (current = 0) => {
+      let query = common_vendor.index.createSelectorQuery().in(instance);
+      query.selectAll(".swiper-item-mag").fields({ dataset: true, rect: true, id: true, size: true });
+      query.exec((eles) => {
+        magazine.Height = 1805 / 1500 * eles[0][current].width + "px";
+        magazine.swiperHeight = 1805 / 1500 * (eles[0][current].width - 40) + "px";
+      });
+    };
     return (_ctx, _cache) => {
       return {
         a: common_vendor.f(swiper.info, (item, index, i0) => {
@@ -113,8 +170,9 @@ const _sfc_main = {
                 d: i
               };
             }),
-            f: common_vendor.n("swiper-item" + index),
-            g: index
+            f: common_vendor.o(($event) => navigateTo(item.href), index),
+            g: common_vendor.n("swiper-item" + index),
+            h: index
           };
         }),
         b: common_vendor.s(swiper.imgStyle),
@@ -129,10 +187,22 @@ const _sfc_main = {
           mode: swiper.mode,
           ["dots-styles"]: swiper.dotsStyles,
           field: "default"
-        })
+        }),
+        i: common_vendor.f(magazine.info, (item, k0, i0) => {
+          return {
+            a: item.url,
+            b: common_vendor.t(item.time),
+            c: item.time
+          };
+        }),
+        j: magazine.swiperHeight,
+        k: _ctx.indicatorDots,
+        l: magazine.autoplay,
+        m: magazine.duration,
+        n: magazine.Height
       };
     };
   }
-};
-const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-1cf27b2a"], ["__file", "/Users/nan/github/uni-app/pages/index/index.vue"]]);
+});
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-1cf27b2a"], ["__file", "/Users/nan/github/uni-tesla/pages/index/index.vue"]]);
 wx.createPage(MiniProgramPage);

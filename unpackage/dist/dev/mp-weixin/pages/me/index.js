@@ -4,5 +4,5 @@ const _sfc_main = {};
 function _sfc_render(_ctx, _cache) {
   return {};
 }
-const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/nan/github/uni-app/pages/me/index.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/nan/github/uni-tesla/pages/me/index.vue"]]);
 wx.createPage(MiniProgramPage);

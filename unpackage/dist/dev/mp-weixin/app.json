@@ -4,7 +4,8 @@
     "pages/map/index",
     "pages/find/index",
     "pages/activity/index",
-    "pages/me/index"
+    "pages/me/index",
+    "pages/car/index"
   ],
   "window": {
     "navigationBarTextStyle": "black",

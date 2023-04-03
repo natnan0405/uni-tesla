@@ -29,6 +29,13 @@
 			"style": {
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path": "pages/car/index",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTitleText": "预约试驾"
+			}
 		}
 	],
 	"globalStyle": {

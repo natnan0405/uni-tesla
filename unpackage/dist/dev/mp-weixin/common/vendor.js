@@ -1262,8 +1262,8 @@ function populateParameters(fromRes, toRes) {
     appVersion: "1.0.0",
     appVersionCode: "100",
     appLanguage: getAppLanguage(hostLanguage),
-    uniCompileVersion: "3.7.3",
-    uniRuntimeVersion: "3.7.3",
+    uniCompileVersion: "3.7.9",
+    uniRuntimeVersion: "3.7.9",
     uniPlatform: "mp-weixin",
     deviceBrand,
     deviceModel: model,
@@ -1547,8 +1547,8 @@ const host = baseInfo ? baseInfo.host : null;
 const shareVideoMessage = host && host.env === "SAAASDK" ? wx$2.miniapp.shareVideoMessage : wx$2.shareVideoMessage;
 var shims = /* @__PURE__ */ Object.freeze({
   __proto__: null,
-  getProvider,
   createSelectorQuery,
+  getProvider,
   shareVideoMessage
 });
 const compressImage = {
@@ -1564,15 +1564,15 @@ const compressImage = {
 var protocols = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   compressImage,
-  redirectTo,
-  previewImage,
+  getAppAuthorizeSetting,
+  getAppBaseInfo,
+  getDeviceInfo,
   getSystemInfo,
   getSystemInfoSync,
-  showActionSheet,
-  getDeviceInfo,
-  getAppBaseInfo,
   getWindowInfo,
-  getAppAuthorizeSetting
+  previewImage,
+  redirectTo,
+  showActionSheet
 });
 const wx$1 = initWx();
 var index = initUni(shims, protocols, wx$1);
@@ -6286,6 +6286,19 @@ function initExtraOptions(miniProgramComponentOptions, vueOptions) {
     }
   });
 }
+const WORKLET_RE = /_(.*)_worklet_factory_/;
+function initWorkletMethods(mpMethods, vueMethods) {
+  if (vueMethods) {
+    Object.keys(vueMethods).forEach((name) => {
+      const matches = name.match(WORKLET_RE);
+      if (matches) {
+        const workletName = matches[1];
+        mpMethods[name] = vueMethods[name];
+        mpMethods[workletName] = vueMethods[workletName];
+      }
+    });
+  }
+}
 function initWxsCallMethods(methods, wxsCallMethods) {
   if (!isArray(wxsCallMethods)) {
     return;
@@ -6613,6 +6626,9 @@ function parseComponent(vueOptions, { parse, mocks: mocks2, isPage: isPage2, ini
   initPropsObserver(mpComponentOptions);
   initExtraOptions(mpComponentOptions, vueOptions);
   initWxsCallMethods(mpComponentOptions.methods, vueOptions.wxsCallMethods);
+  {
+    initWorkletMethods(mpComponentOptions.methods, vueOptions.methods);
+  }
   if (parse) {
     parse(mpComponentOptions, { handleLink: handleLink2 });
   }
@@ -6682,9 +6698,14 @@ const MPPage = Page;
 const MPComponent = Component;
 function initTriggerEvent(mpInstance) {
   const oldTriggerEvent = mpInstance.triggerEvent;
-  mpInstance.triggerEvent = function(event, ...args) {
+  const newTriggerEvent = function(event, ...args) {
     return oldTriggerEvent.apply(mpInstance, [customizeEvent(event), ...args]);
   };
+  try {
+    mpInstance.triggerEvent = newTriggerEvent;
+  } catch (error) {
+    mpInstance._triggerEvent = newTriggerEvent;
+  }
 }
 function initMiniProgramHook(name, options, isComponent) {
   const oldHook = options[name];
@@ -6779,11 +6800,11 @@ function handleLink(event) {
 }
 var parseOptions = /* @__PURE__ */ Object.freeze({
   __proto__: null,
-  mocks,
-  isPage,
-  initRelation,
   handleLink,
-  initLifetimes
+  initLifetimes,
+  initRelation,
+  isPage,
+  mocks
 });
 const createApp = initCreateApp();
 const createPage = initCreatePage(parseOptions);
@@ -6809,6 +6830,8 @@ exports.o = o;
 exports.onMounted = onMounted;
 exports.p = p;
 exports.reactive = reactive;
+exports.ref = ref;
 exports.resolveComponent = resolveComponent;
 exports.s = s;
 exports.t = t;
+exports.wx$1 = wx$1;

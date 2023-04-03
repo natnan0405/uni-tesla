@@ -135,4 +135,35 @@
 			margin-top: 0px !important;
 		}
 	}
+
+	.magazine {
+		padding: 60px 0;
+		.title {
+			font-size: $uni-font-size-larger;
+			font-weight: bold;
+			margin-bottom: 20px;
+			text-align: center;
+		}
+		.swiper-item-mag {
+			padding: 0 20px;
+			.time {
+				height: 30px;
+				line-height: 30px;
+				font-size: $uni-font-size-base;
+				text-align: center;
+			}
+		}
+	}
+
+	.new-user {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		padding: 0 0 60px;
+		imgae {
+			width: 80%;
+			height: 100%;
+			object-fit: fill;
+		}
+	}
 }
